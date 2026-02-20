@@ -1,0 +1,15 @@
+##Create a new peristent socket 
+
+```
+socat TCP-LISTEN:3333,reuseaddr,fork STDOUT
+```
+
+## update the host file 
+
+```
+127.0.0.1 donate.v2.xmrig.com:3333
+```
+
+##Run xmrig
+
+./xmrig --donate-level 0 --bench=10
