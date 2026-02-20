@@ -1,3 +1,8 @@
+run a process named manually_trigger_composite_alert or put that as a parameter to any other process,
+
+---
+
+
 sudo vi /usr/local/bin/manually_trigger_composite_alert.sh
 #!/bin/bash
 while true; do
