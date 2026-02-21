@@ -1,3 +1,5 @@
+##Pre requisites
+
 ```
 sudo apt update
 sudo apt install openjdk-8-jdk
@@ -10,21 +12,26 @@ sudo update-alternatives --config java
 java -version
 ```
 
-
-
 ## Install dependancies 
 
 ```
 mvn clean install 
 ```
 
-## 1. Start the vulnerable server:                                               
+## open 3 terminals 
+
+###Terminal 1 
+
+```
+mvn exec:java -Dexec.mainClass=demo.VulnerableServer  
+```
+###Terminal 2
 
 ```
 mvn exec:java -Dexec.mainClass=demo.VulnerableServer                          
 ```
 
-## 2. In a separate terminal, start the callback monitor:                        
-```
-mvn exec:java -Dexec.mainClass=demo.CallbackMonitor
-```
+###Terminal 3
+
+
+
