@@ -28,7 +28,7 @@ mvn exec:java -Dexec.mainClass=demo.VulnerableServer
 ###Terminal 2
 
 ```
-mvn exec:java -Dexec.mainClass=demo.VulnerableServer                          
+mvn exec:java -Dexec.mainClass=demo.CallbackMonitor
 ```
 
 ###Terminal 3
