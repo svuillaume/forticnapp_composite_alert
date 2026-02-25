@@ -1,215 +1,76 @@
-# Log4Shell Lab – Java + Maven Demo
 
-This project demonstrates a simple Java environment with a vulnerable Log4j setup for lab/testing purposes.  
-It includes two demo classes:
+## 1️⃣ Install Java and Maven
 
-- `demo.VulnerableServer` – Simulates a vulnerable server
-- `demo.CallbackMonitor` – Observes callbacks from the vulnerable server
+Update packages and install OpenJDK 17 + Maven:
 
-> **Disclaimer:** This is for **educational purposes only**. Do not run on production or public-facing systems.
-
----
-
-## Prerequisites
-
-- **Java 17 (LTS)**
-- **Maven**
-
-### Install on Ubuntu/Debian
 ```bash
 sudo apt update
 sudo apt install openjdk-17-jdk maven -y
 
-Install on RHEL/Fedora
-
-sudo dnf install java-17-openjdk-devel maven -y
-
-Verify
+Verify the installation:
 
 java -version
-javac -version
 mvn -version
 
-Set JAVA_HOME (if needed)
-
-echo 'export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64' >> ~/.bashrc
-echo 'export PATH=$JAVA_HOME/bin:$PATH' >> ~/.bashrc
-source ~/.bashrc
-
+You should see Java 17 and Maven versions printed.
 
 ⸻
 
-Project Setup
+2️⃣ Download or Create the Lab Project
 
-Create the project using Maven:
-
-mkdir -p ~/projects && cd ~/projects
-
-mvn archetype:generate \
-  -DgroupId=demo \
-  -DartifactId=log4shell-lab \
-  -DarchetypeArtifactId=maven-archetype-quickstart \
-  -DarchetypeVersion=1.4 \
-  -DinteractiveMode=false
-
-cd log4shell-lab
-
-# Remove default App.java
-rm -rf src/main/java/demo/App.java
-
-
-⸻
-
-Project Structure
+Ensure your project folder looks like this:
 
 log4shell-lab/
-├── pom.xml
-└── src/main/java/demo/
-        VulnerableServer.java
-        CallbackMonitor.java
+ ├── pom.xml
+ └── src/main/java/demo/
+     ├── VulnerableServer.java
+     └── CallbackMonitor.java
 
-
-⸻
-
-pom.xml
-
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 
-         http://maven.apache.org/xsd/maven-4.0.0.xsd">
-
-    <modelVersion>4.0.0</modelVersion>
-
-    <groupId>demo</groupId>
-    <artifactId>log4shell-lab</artifactId>
-    <version>1.0-SNAPSHOT</version>
-
-    <properties>
-        <maven.compiler.source>17</maven.compiler.source>
-        <maven.compiler.target>17</maven.compiler.target>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    </properties>
-
-    <dependencies>
-        <!-- Log4j vulnerable version for lab -->
-        <dependency>
-            <groupId>org.apache.logging.log4j</groupId>
-            <artifactId>log4j-core</artifactId>
-            <version>2.14.1</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.logging.log4j</groupId>
-            <artifactId>log4j-api</artifactId>
-            <version>2.14.1</version>
-        </dependency>
-    </dependencies>
-
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>exec-maven-plugin</artifactId>
-                <version>3.1.0</version>
-            </plugin>
-        </plugins>
-    </build>
-</project>
-
+Important: The Java package in files is demo.
 
 ⸻
 
-Demo Classes
+3️⃣ Build the Project
 
-VulnerableServer.java
+From inside the log4shell-lab folder, run:
 
-package demo;
+mvn clean install
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
-import java.util.Scanner;
-
-public class VulnerableServer {
-    private static final Logger logger = LogManager.getLogger(VulnerableServer.class);
-
-    public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("VulnerableServer started. Type log messages:");
-        while (true) {
-            String input = scanner.nextLine();
-            logger.info(input); // This is intentionally vulnerable
-        }
-    }
-}
-
-CallbackMonitor.java
-
-package demo;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
-public class CallbackMonitor {
-    private static final Logger logger = LogManager.getLogger(CallbackMonitor.class);
-
-    public static void main(String[] args) {
-        System.out.println("CallbackMonitor started. Listening for callbacks...");
-        // Example placeholder: just prints periodically
-        while (true) {
-            logger.info("Monitoring callbacks...");
-            try {
-                Thread.sleep(5000);
-            } catch (InterruptedException e) {
-                break;
-            }
-        }
-    }
-}
-
+✅ This compiles the Java code and prepares it to run.
 
 ⸻
 
-Build & Run
+4️⃣ Run the Vulnerable Server
 
-Build
-
-mvn clean package
-
-Run Vulnerable Server
+Start the vulnerable server with:
 
 mvn exec:java -Dexec.mainClass="demo.VulnerableServer"
 
-Run Callback Monitor
+This launches the lab for testing.
+
+⸻
+
+5️⃣ Run the Callback Monitor (Optional)
+
+To monitor for JNDI/LDAP callbacks:
 
 mvn exec:java -Dexec.mainClass="demo.CallbackMonitor"
 
+Use this if you want to observe the lab safely triggering outbound requests.
 
 ⸻
 
-Useful Maven Commands
-
-mvn clean           # Remove target/
-mvn compile         # Compile code
-mvn package         # Build JAR
-mvn exec:java       # Run main class
-mvn dependency:tree # Show dependency tree
-
+⚠️ Security Notes
+	•	Isolation: Run the lab in a VM or isolated network.
+	•	Vulnerable Version: Uses Log4j 2.14.1 (CVE-2021-44228).
+	•	Do NOT expose to the Internet.
+	•	Snapshots and revert points are recommended before testing.
 
 ⸻
 
-Quick Start Checklist
-	•	Java 17 installed
-	•	Maven installed
-	•	Project generated via Maven archetype
-	•	pom.xml updated
-	•	Demo classes added
-	•	mvn clean package successful
-	•	Run classes with mvn exec:java
-
----
-
-✅ This **single Markdown file** now contains **everything needed**: setup instructions, Maven project, pom.xml, demo classes, build & run commands, and troubleshooting checklist.
-
-If you want, I can **also add instructions for switching Java versions and managing dependencies directly in this same file**, so it becomes a **complete one-stop reference**.  
-
-Do you want me to do that?
+✅ Summary
+	•	Step 1: Install Java & Maven
+	•	Step 2: Ensure project folder & package names match
+	•	Step 3: Build project
+	•	Step 4: Run VulnerableServer
+	•	Step 5: Optional: Run CallbackMonitor
