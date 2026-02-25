@@ -539,37 +539,41 @@ Search for dependencies at: https://mvnrepository.com/
 ---
 
 ## Example: Complete Workflow
-
+### Vulnerable Server
 ```bash
-# 1. Install Java
+# 1. Install Java + Maven
 sudo apt update
 sudo apt install openjdk-17-jdk maven -y
 
-# 2. Verify
+# 2. Verify installation
 java -version
 mvn -version
 
 # 3. Create project directory
 mkdir -p ~/projects && cd ~/projects
 
-# 4. Generate new project
+# 4. Generate new Maven project (UPDATED groupId + artifactId)
 mvn archetype:generate \
-  -DgroupId=com.example \
-  -DartifactId=demo \
+  -DgroupId=demo \
+  -DartifactId=log4shell-lab \
   -DarchetypeArtifactId=maven-archetype-quickstart \
   -DarchetypeVersion=1.4 \
   -DinteractiveMode=false
 
 # 5. Navigate to project
-cd demo
+cd log4shell-lab
 
 # 6. Build project
 mvn clean install
 
-# 7. Run application
-mvn exec:java -Dexec.mainClass="com.example.App"
+# 7. Run vulnerable server (UPDATED main class)
+mvn exec:java -Dexec.mainClass="demo.VulnerableServer"
 ```
+###Callback server 
 
+```
+mvn exec:java -Dexec.mainClass="demo.CallbackMonitor"
+```
 ---
 
 ## Troubleshooting
