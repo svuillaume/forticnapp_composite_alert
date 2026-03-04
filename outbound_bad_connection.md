@@ -26,7 +26,13 @@ Connection to 92.118.39.212 3389 port [tcp/ms-wbt-server] succeeded!
 Use `lsof` to view all active TCP connections and identify processes responsible:
 
 ```bash
-sudo lsof -i -nP | grep TCP
+ sudo lsof -i -nP | grep TCP | awk '{ print strftime("%Y-%m-%d %H:%M:%S"), $0 }'
+```
+or
+
+```
+echo "===== $(date) ====="
+sudo lsof -i -nP | grep TCP 
 ```
 
 ### **Command Breakdown:**
